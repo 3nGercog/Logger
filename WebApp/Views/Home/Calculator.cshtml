@@ -1,6 +1,51 @@
-﻿@{
+﻿@using WebApp.Models
+@model  Coordinate
+@{
     ViewBag.Title = "About";
+    string error = ViewBag.Error ?? "";
+    List<WebApp.Models.Coordinate> hst = (List<WebApp.Models.Coordinate>)ViewData["graf"];
+    int maxX = hst.Count == 0 ? 0 : hst.Max(x => x.X);
+    int maxY = hst.Count == 0 ? 0 : hst.Max(y => y.Y);
+    int max = maxX > maxY ? (maxX + 2) : (maxY + 2);
 }
-<h3>@ViewBag.Message</h3>
+<div class="row">
+    <h4>Coordinate</h4>
+    <hr />
+    <div class="col-md-6">
+        @using (Html.BeginForm("Calculator", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
 
-<p></p>
+            @*@Html.ValidationSummary("", new { @class = "text-danger" })*@
+            <div class="form-group">
+                @Html.LabelFor(m => m.X, new { @class = "col-md-3 control-label" })
+                <div class="col-md-9">
+                    @Html.TextBoxFor(m => m.X, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.X, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Y, new { @class = "col-md-3 control-label" })
+                <div class="col-md-9">
+                    @Html.TextBoxFor(m => m.Y, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Y, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-3 col-md-9">
+                    <input type="submit" class="btn btn-info" value="Add" />
+                </div>
+            </div>
+        }
+        <div class="col-md-12">@error</div>
+    </div>
+    <div class="col-md-6"><spa>@ViewBag.Result</spa></div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div id="box" class="jxgbox" style="width:100%; height:400px; margin-bottom: 20px;"></div>
+    </div>
+</div>
+<script>
+    var hst = @Html.Raw(Json.Encode(hst));
+    var max = @max;
+</script>
