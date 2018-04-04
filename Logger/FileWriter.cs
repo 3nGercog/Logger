@@ -9,11 +9,17 @@ namespace Logger
 {
     class FileWriter : IWriter
     {
+        const string PATH = "logs";
         public void Write(DateTime dateTime, Level level, string message)
         {
+            
+            if (!Directory.Exists(PATH))
+            {
+                Directory.CreateDirectory(PATH);
+            }
             var date = dateTime.ToString("ddyyyyMM");
             var logFileName = string.Format("{0}.log", date);
-            using (var streamWriter = new StreamWriter(logFileName, true))
+            using (var streamWriter = new StreamWriter(Path.Combine(PATH, logFileName), true))
             {
                 var time = dateTime.ToString("HH:mm:ss.fff");
                 var line = string.Format("{0}\t{1}\t{2}", time, level, message);

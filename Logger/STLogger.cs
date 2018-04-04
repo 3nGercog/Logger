@@ -6,36 +6,47 @@ using System.Threading.Tasks;
 
 namespace Logger
 {
-    public class STLogger : LogBase, ILogger
-    { 
-        public STLogger(Target targets):base(targets)
+    public class STLogger : LoggerBase, ILogger
+    {
+        public STLogger(Target targets) : base(targets)
         {
-            
+
         }
         public Target Targets { get { return this.target; } }
         public void Debug(string message)
         {
+#if DEBUG
             Log(Level.Debug, message);
+#endif
         }
-
-        public void Error(string message)
+        public void Debug(object obj)
         {
-            Log(Level.Error, message);
+#if DEBUG
+            Log(Level.Debug, obj);
+#endif
         }
-
-        public void Fatal(string message)
+        public void Debug(string format, params object[] args)
         {
-            Log(Level.Fatal, message);
+#if DEBUG
+            Log(Level.Debug, format, args);
+#endif
         }
+        
+        public void Error(string message) { Log(Level.Error, message); }
+        public void Error(object obj) { Log(Level.Error, obj); }
+        public void Error(string format, params object[] args) { Log(Level.Error, format, args); }
 
-        public void Info(string message)
-        {
-            Log(Level.Info, message);
-        }
+        public void Fatal(string message) { Log(Level.Fatal, message); }
+        public void Fatal(object obj) { Log(Level.Fatal, obj); }
+        public void Fatal(string format, params object[] args) { Log(Level.Fatal, format, args); }
 
-        public void Warn(string message)
-        {
-            Log(Level.Warn, message);
-        }
+        public void Info(string message) { Log(Level.Info, message); }
+        public void Info(object obj) { Log(Level.Info, obj); }
+        public void Info(string format, params object[] args) { Log(Level.Info, format, args); }
+
+
+        public void Warn(string message) { Log(Level.Warn, message); }
+        public void Warn(object obj) { Log(Level.Warn, obj); }
+        public void Warn(string format, params object[] args) { Log(Level.Warn, format, args); }
     }
 }

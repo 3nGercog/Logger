@@ -25,7 +25,7 @@ namespace Logger
             cWriter = new ConsoleWriter();
             fileWriter = new FileWriter();
             dbWriter = new DataBaseWriter();
-            elWriter = new EventLogWriter();
+            elWriter = new EventLogWriter("STLoger");
         }
  
         public DateTime DateTime { get { return dateTime; } }

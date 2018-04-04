@@ -10,37 +10,40 @@ namespace Logger
 {
     class EventLogWriter : IWriter
     {
-        const string SOURCE = "STLoger";
+        string source = "";
+        public EventLogWriter(string source)
+        {
+            this.source = source;
+        }
         const string LOGNAME = "Application";
         public void Write(DateTime dateTime, Level level, string message)
         {
-            if (!EventLog.SourceExists(SOURCE))
+            if (!EventLog.SourceExists(source))
             {
-                EventLog.CreateEventSource(SOURCE, LOGNAME);
+                EventLog.CreateEventSource(source, LOGNAME);
             }
-            // Create an EventLog instance and assign its source.
             using (EventLog myLog = new EventLog())
             {
-                myLog.Source = SOURCE;
+                myLog.Source = source;
                 switch (level)
                 {
                     case Level.Debug:
-                        myLog.WriteEntry(message, EventLogEntryType.SuccessAudit, Thread.CurrentThread.ManagedThreadId);
+                        myLog.WriteEntry(message, EventLogEntryType.SuccessAudit, 0);
                         break;
                     case Level.Info:
-                        myLog.WriteEntry(message, EventLogEntryType.Information, Thread.CurrentThread.ManagedThreadId);
+                        myLog.WriteEntry(message, EventLogEntryType.Information, 1);
                         break;
                     case Level.Warn:
-                        myLog.WriteEntry(message, EventLogEntryType.Warning, Thread.CurrentThread.ManagedThreadId);
+                        myLog.WriteEntry(message, EventLogEntryType.Warning, 2);
                         break;
                     case Level.Error:
-                        myLog.WriteEntry(message, EventLogEntryType.Error, Thread.CurrentThread.ManagedThreadId);
+                        myLog.WriteEntry(message, EventLogEntryType.Error, 3);
                         break;
                     case Level.Fatal:
-                        myLog.WriteEntry(message, EventLogEntryType.FailureAudit, Thread.CurrentThread.ManagedThreadId);
+                        myLog.WriteEntry(message, EventLogEntryType.FailureAudit, 4);
                         break;
                     default:
-                        myLog.WriteEntry(message, EventLogEntryType.Information, Thread.CurrentThread.ManagedThreadId);
+                        myLog.WriteEntry(message, EventLogEntryType.Information, 1);
                         break;
                 }                 
             }
