@@ -4,8 +4,8 @@
     ViewBag.Title = "About";
     string error = ViewBag.Error ?? "";
     List<WebApp.Models.Coordinate> hst = (List<WebApp.Models.Coordinate>)ViewData["graf"];
-    int maxX = hst.Count == 0 ? 0 : hst.Max(x => x.X);
-    int maxY = hst.Count == 0 ? 0 : hst.Max(y => y.Y);
+    int maxX = hst == null || hst.Count == 0 ? 0 : hst.Max(x => x.X);
+    int maxY = hst == null || hst.Count == 0 ? 0 : hst.Max(y => y.Y);
     int max = maxX > maxY ? (maxX + 2) : (maxY + 2);
 }
 <div class="row">

@@ -9,7 +9,7 @@ namespace Logger
 {
     class FileWriter : IWriter
     {
-        const string PATH = "logs";
+        string PATH = AppDomain.CurrentDomain.BaseDirectory + "\\bin\\logs";
         public void Write(DateTime dateTime, Level level, string message)
         {
             
