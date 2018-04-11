@@ -17,7 +17,7 @@ namespace Logger
             {
                 Directory.CreateDirectory(PATH);
             }
-            var date = dateTime.ToString("ddyyyyMM");
+            var date = dateTime.ToString("ddMMyyyy");
             var logFileName = string.Format("{0}.log", date);
             using (var streamWriter = new StreamWriter(Path.Combine(PATH, logFileName), true))
             {

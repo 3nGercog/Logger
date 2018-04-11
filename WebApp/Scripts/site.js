@@ -3,7 +3,9 @@
 });
 $(window).on("load", function () {
     console.log("window load");
-    creareCharts();
+    if(hst != undefined || hst != null) {
+        creareCharts();
+    }
 });
 $('input[type=button]').on('click', function (e) {
     var x = $('input[name=X]').val();

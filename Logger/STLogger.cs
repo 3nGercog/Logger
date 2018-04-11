@@ -31,7 +31,7 @@ namespace Logger
             Log(Level.Debug, format, args);
 #endif
         }
-        
+
         public void Error(string message) { Log(Level.Error, message); }
         public void Error(object obj) { Log(Level.Error, obj); }
         public void Error(string format, params object[] args) { Log(Level.Error, format, args); }

@@ -164,10 +164,17 @@
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Extention\BaseController.cs" />
-    <Compile Include="Extention\ILogger.cs" />
+    <Compile Include="Extention\SiteLevel.cs" />
+    <Compile Include="Models\FileModel.cs" />
+    <Compile Include="Models\IndexViewModel.cs" />
+    <Compile Include="Services\ILogger.cs" />
+    <Compile Include="Services\IReader.cs" />
+    <Compile Include="Services\ISession.cs" />
     <Compile Include="Extention\LoggerAttribute.cs" />
-    <Compile Include="Extention\LoggerService.cs" />
+    <Compile Include="Services\LoggerService.cs" />
     <Compile Include="Extention\SessionExtensions.cs" />
+    <Compile Include="Services\ReaderService.cs" />
+    <Compile Include="Services\SessionService.cs" />
     <Compile Include="Extention\StringExtension.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -192,6 +199,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -213,6 +222,8 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Calculator.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\_TableView.cshtml" />
+    <Content Include="Views\Home\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -18,6 +18,9 @@ namespace WebApp
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute("Next", "Next/{query}/{startIndex}",
+            new { controller = "Home", action = "Next", startIndex = 0, pageSize = 100 });
         }
     }
 }

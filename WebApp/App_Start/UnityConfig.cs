@@ -1,6 +1,11 @@
+using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using System;
-
+using System.Web;
 using Unity;
+using Unity.AspNet.Mvc;
+using Unity.Injection;
+using Unity.Lifetime;
+using WebAp;
 
 namespace WebApp
 {
@@ -41,7 +46,11 @@ namespace WebApp
             // container.LoadConfiguration();
 
             // TODO: Register your type's mappings here.
-             container.RegisterType<ILogger, LoggerService>();
+            container.RegisterType<HttpSessionStateBase>(new InjectionFactory(x => new HttpSessionStateWrapper(HttpContext.Current.Session)));
+            container.RegisterType<ILogger, LoggerService>();
+            //container.RegisterType<ISession>(new ContainerControlledLifetimeManager());
+            container.RegisterType<ISession, SessionService>();
+            container.RegisterType<IReader, ReaderService>();
         }
     }
 }
