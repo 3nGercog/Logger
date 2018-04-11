@@ -27,7 +27,7 @@ namespace WebApp.Controllers
                 ivm.Level = SiteLevel.Warn;
                 var mod = Reader.Sort(ivm);
                 var tables = mod.OrderBy(h => h.FileName).ThenBy(h => h.Id).Skip(0).Take(100).ToList();
-                ViewData["table"] = tables;
+                ViewData["table"] = tables ?? new List<FileModel>();
                 ViewBag.AllCount = mod.Count;
                 STLogger.Info(mod);
             }
@@ -52,7 +52,7 @@ namespace WebApp.Controllers
             {
                 var mod = Reader.Sort(model);
                 var tables = mod.OrderBy(h => h.FileName).ThenBy(h => h.Id).Skip(0).Take(100).ToList();
-                ViewData["table"] = tables;
+                ViewData["table"] = tables ?? new List<FileModel>();
                 ViewBag.AllCount = mod.Count;
                 STLogger.Info(mod);
             }
@@ -78,7 +78,7 @@ namespace WebApp.Controllers
                 mod = Reader.GetAll();
             var tables = mod.OrderBy(h => h.FileName).ThenBy(h => h.Id).Skip(startIndex).Take(pageSize).ToList();
             
-            ViewData["table"] = tables;
+            ViewData["table"] = tables ?? new List<FileModel>();
             //var page = source.Skip(startIndex).Take(pageSize);
             return PartialView("_TableView");
         }
