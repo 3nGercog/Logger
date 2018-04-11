@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using PagedList;
 using System.Web.Mvc;
 using WebAp;
 using WebApp.Models;
@@ -18,16 +19,17 @@ namespace WebApp.Controllers
         {}
 
         [Logger()]
-        public ActionResult Index()
+        public ActionResult Index(IndexViewModel model, int? page)
         {
-            IndexViewModel ivm = new IndexViewModel();
+            IndexViewModel ivm = model;
             STLogger.Info("Create IndexViewModel");
             try
             {
-                ivm.Level = SiteLevel.Warn;
+                int pg = page.HasValue ? page.Value : 1;
+                int size = 100;
                 var mod = Reader.Sort(ivm);
-                var tables = mod.OrderBy(h => h.FileName).ThenBy(h => h.Id).Skip(0).Take(100).ToList();
-                ViewData["table"] = tables ?? new List<FileModel>();
+                var tables = mod.OrderBy(h => h.FileName).ThenBy(h => h.Id).ToList();
+                ViewData["table"] = tables.ToPagedList(pg, size) ?? new List<FileModel>().ToPagedList(pg, size);
                 ViewBag.AllCount = mod.Count;
                 STLogger.Info(mod);
             }
@@ -50,9 +52,10 @@ namespace WebApp.Controllers
             STLogger.Info("Create IndexViewModel");
             try
             {
+
                 var mod = Reader.Sort(model);
-                var tables = mod.OrderBy(h => h.FileName).ThenBy(h => h.Id).Skip(0).Take(100).ToList();
-                ViewData["table"] = tables ?? new List<FileModel>();
+                var tables = mod.OrderBy(h => h.FileName).ThenBy(h => h.Id).ToList();
+                ViewData["table"] = tables.ToPagedList(1, 100) ?? new List<FileModel>().ToPagedList(1, 100);
                 ViewBag.AllCount = mod.Count;
                 STLogger.Info(mod);
             }

@@ -1,26 +1,6 @@
 ﻿@using WebApp.Models
 @{
-    List<FileModel> hist = (List<FileModel>)ViewData["table"];
+    
 }
-<table class="table-bordered tb">
-    @if (hist.Count > 0)
-    {
-    <tr>
-        <th class="text-center">File</th>
-        <th class="text-center">Time</th>
-        <th class="text-center">Level</th>
-        <th class="text-center">Message</th>
-    </tr>
-    }
-    @foreach (var item in hist)
-    {
 
-    <tr>
-        <td class="text-center">@item.FileName</td>
-        <td class="text-center">@Html.ActionLink(item.Id, "Detail", new { model = Model, file = item.FileName, item = item.Id })</td>
-        <td class="text-center">@item.Level</td>
-        <td class="text-center">@item.Message</td>
-    </tr>
-    }
-</table>
 

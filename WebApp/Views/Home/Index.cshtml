@@ -1,46 +1,76 @@
 ﻿@model WebApp.Models.IndexViewModel
+@using WebApp.Models
+@using PagedList.Mvc
 @{
     ViewBag.Title = "Home Page";
+    PagedList.IPagedList<FileModel> hist = (PagedList.IPagedList<FileModel>)ViewData["table"];
+
 }
 
 <div class="row text-center filter">
     <div class="col-md-12">
-        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "form-inline" }))
-    {
-        <div class="form-group col-md-1">
-            @Html.LabelFor(m => m.Level)
-        </div>
-        <div class="form-group col-md-3">
-            @Html.EnumDropDownListFor(m => m.Level, null, new { @class = "form-control" })
-        </div>
-        <div class="form-group col-md-1">
-            @Html.LabelFor(m => m.Search)
-        </div>
-        <div class="form-group col-md-3">
-            @Html.TextBoxFor(m => m.Search, new { @class = "form-control" })
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-info">Submit</button>
-        </div>
-}
+        @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { @class = "form-inline" }))
+        {
+            <div class="form-group col-md-1">
+                @Html.LabelFor(m => m.Level)
+            </div>
+            <div class="form-group col-md-3">
+                @Html.EnumDropDownListFor(m => m.Level, null, new { @class = "form-control" })
+            </div>
+            <div class="form-group col-md-1">
+                @Html.LabelFor(m => m.Search)
+            </div>
+            <div class="form-group col-md-3">
+                @Html.TextBoxFor(m => m.Search, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-info">Submit</button>
+            </div>
+        }
     </div>
 </div>
 
 <div class="row">
     <div id="urltable" class="col-md-12">
-        @Html.Partial("_TableView")
+        <table class="table-bordered tb">
+            @if (hist.Count > 0)
+            {
+                <tr>
+                    <th class="text-center">File</th>
+                    <th class="text-center">Time</th>
+                    <th class="text-center">Level</th>
+                    <th class="text-center">Message</th>
+                </tr>
+            }
+            @foreach (var item in hist)
+            {
+
+                <tr>
+                    <td class="text-center">@item.FileName</td>
+                    <td class="text-center">@Html.ActionLink(item.Id, "Detail", new { model = Model, file = item.FileName, item = item.Id })</td>
+                    <td class="text-center">@item.Level</td>
+                    <td class="text-center">@item.Message</td>
+                </tr>
+            }
+        </table>
+
     </div>
+    <div class="col-md-12 text-center">
+        Page @(hist.PageCount < hist.PageNumber ? 0 : hist.PageNumber) of @hist.PageCount
 
-    <ul class="pager">
-        @{
-            int count = 1;
-            int allCount = ViewBag.AllCount;
+        @Html.PagedListPager(hist, page => Url.Action("Index",
+             new { page}))
+    </div>
+    @*<ul class="pager">
+            @{
+                int count = 1;
+                int allCount = ViewBag.AllCount;
 
-        }
-        @for (int i = 0; i < allCount; i = i + 100)
-        {
-            <li>@Ajax.ActionLink(count++.ToString(), "Next", new { query = "next", startIndex = i, pageSize = 40 }, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "urltable" })</li>
-        }
+            }
+            @for (int i = 0; i < allCount; i = i + 100)
+            {
+                <li>@Ajax.ActionLink(count++.ToString(), "Next", new { query = "next", startIndex = i, pageSize = 40 }, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "urltable" })</li>
+            }
 
-    </ul>
+        </ul>*@
 </div>
