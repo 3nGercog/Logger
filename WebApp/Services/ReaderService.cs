@@ -36,7 +36,7 @@ namespace WebApp
             }
             return result;
         }
-        public List<FileModel> GetdAll()
+        public List<FileModel> GetAll()
         {
             return this.ReadAll();
         }
@@ -46,7 +46,7 @@ namespace WebApp
             return File.ReadAllLines(Path.Combine(AppPath, fileName + ".log")).FirstOrDefault(r => r.StartsWith(idRow));
         }
 
-        public List<FileModel> GetSorted(IndexViewModel model)
+        public List<FileModel> Sort(IndexViewModel model)
         {
             var allRows = this.ReadAll();
             if(model.Level == SiteLevel.All && string.IsNullOrEmpty(model.Search))
@@ -59,7 +59,7 @@ namespace WebApp
             }
             else if (model.Level != SiteLevel.All && !string.IsNullOrEmpty(model.Search))
             {
-                return allRows.Where(fm => fm.Id.Contains(model.Search) || fm.Level.Contains(model.Level.ToString()) || fm.Message.Contains(model.Search)).ToList();
+                return allRows.Where(fm =>  fm.Level.Contains(model.Level.ToString()) && (fm.Id.Contains(model.Search) || fm.Message.Contains(model.Search))).ToList();
             }
             else if (model.Level != SiteLevel.All && string.IsNullOrEmpty(model.Search))
             {
@@ -67,7 +67,7 @@ namespace WebApp
             }
             else
             {
-                return allRows.ToList();
+                return allRows;
             }
         }
     }

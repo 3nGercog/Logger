@@ -25,7 +25,7 @@ namespace WebApp.Controllers
             try
             {
                 ivm.Level = SiteLevel.Warn;
-                var mod = Reader.GetSorted(ivm);
+                var mod = Reader.Sort(ivm);
                 var tables = mod.OrderBy(h => h.FileName).ThenBy(h => h.Id).Skip(0).Take(100).ToList();
                 ViewData["table"] = tables;
                 ViewBag.AllCount = mod.Count;
@@ -50,7 +50,7 @@ namespace WebApp.Controllers
             STLogger.Info("Create IndexViewModel");
             try
             {
-                var mod = Reader.GetSorted(model);
+                var mod = Reader.Sort(model);
                 var tables = mod.OrderBy(h => h.FileName).ThenBy(h => h.Id).Skip(0).Take(100).ToList();
                 ViewData["table"] = tables;
                 ViewBag.AllCount = mod.Count;
@@ -73,9 +73,9 @@ namespace WebApp.Controllers
         {
             List<FileModel> mod;
             if (model != null)
-                mod = Reader.GetSorted(model);
+                mod = Reader.Sort(model);
             else
-                mod = Reader.GetdAll();
+                mod = Reader.GetAll();
             var tables = mod.OrderBy(h => h.FileName).ThenBy(h => h.Id).Skip(startIndex).Take(pageSize).ToList();
             
             ViewData["table"] = tables;

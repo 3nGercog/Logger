@@ -9,8 +9,8 @@ namespace WebAp
 {
     public interface IReader
     {
-        List<FileModel> GetdAll();
-        List<FileModel> GetSorted(IndexViewModel model);
+        List<FileModel> GetAll();
+        List<FileModel> Sort(IndexViewModel model);
         string GetOne(string fileName, string idRow);
     }
 }
