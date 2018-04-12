@@ -21,19 +21,21 @@ namespace WebApp
             string fileName = "";
             string[] rows, arr;
             //CultureInfo provider = new CultureInfo("en-US");
+            StreamReader streamReader = new StreamReader(Stream.Null);
 
             foreach (var item in dir.GetFiles())
             {
                 p = Path.Combine(AppPath, item.Name);
-                rows = File.ReadAllLines(p);
+                streamReader = new StreamReader(p);
+                rows = streamReader.ReadToEnd().Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
                 fileName = Path.GetFileNameWithoutExtension(p);
                 foreach (var r in rows)
                 {
                     arr = r.Split(new char[] { '\t' });
-                    result.Add(new FileModel { FileName = fileName, Id = arr[0] , Level = arr[1], Message = arr[2]});
+                    result.Add(new FileModel { FileName = fileName, Id = arr[0], Level = arr[1], Message = arr[2] });
                 }
-                
             }
+            streamReader.Close();
             return result;
         }
         public List<FileModel> GetAll()
