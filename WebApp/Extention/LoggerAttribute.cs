@@ -4,13 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Unity.Attributes;
 
 namespace WebApp
 {
     public class LoggerAttribute: ActionFilterAttribute
     {
-        [Dependency]
         public ILogger Logger { get; set; }
         STLogger stLogger;
 

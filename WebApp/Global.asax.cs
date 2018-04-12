@@ -13,11 +13,13 @@ namespace WebApp
     {
         protected void Application_Start()
         {
+            AutofacConfig.ConfigureContainer();
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
+            //UnityConfig.RegisterTypes(UnityConfig.Container);
+            //ControllerBuilder.Current.SetControllerFactory(new UnityControllerFactory((UnityContainer)UnityConfig.Container));
         }
 
         //protected void Session_Start()

@@ -59,7 +59,7 @@ namespace WebApp
             }
             else if (model.Level != SiteLevel.All && !string.IsNullOrEmpty(model.Search))
             {
-                return allRows.Where(fm =>  fm.Level.Contains(model.Level.ToString()) && (fm.Id.Contains(model.Search) || fm.Message.Contains(model.Search))).ToList();
+                return allRows.Where(fm =>  fm.Level.Contains(model.Level.ToString()) && (fm.FileName.Contains(model.Search) || fm.Id.Contains(model.Search) || fm.Message.Contains(model.Search))).ToList();
             }
             else if (model.Level != SiteLevel.All && string.IsNullOrEmpty(model.Search))
             {

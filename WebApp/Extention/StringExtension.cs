@@ -14,7 +14,7 @@ namespace WebApp
             int number = 1;
             for(int i = 0; i < coordinates.Count; i++)
             {
-                result += string.Format("{0}.[ X = {1}, Y = {2}]; ",number.ToString(), coordinates[i].X, coordinates[i].Y);
+                result += string.Format("{0}.[ X = {1}, Y = {2}]; ", number.ToString(), coordinates[i].X, coordinates[i].Y);
                 number++;
             }
             return result;

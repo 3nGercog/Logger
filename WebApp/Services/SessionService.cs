@@ -2,42 +2,47 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.SessionState;
 
 namespace WebApp
 {
     public class SessionService : ISession
     {
-        private readonly HttpSessionStateBase _session;
+        private readonly HttpContextBase _httpContext;
 
-        public SessionService(HttpSessionStateBase session)
-        {
-            _session = session;
+        public SessionService(HttpContextBase httpContext)
+        {              
+            this._httpContext = httpContext ?? throw new ArgumentNullException(nameof(httpContext));
         }
 
         public void Clear()
         {
-            _session.RemoveAll();
+            var session = this._httpContext.Session ?? throw new TypeLoadException();
+            session.RemoveAll();
         }
 
         public void Delete(string key)
         {
-            _session.Remove(key);
+            var session = this._httpContext.Session ?? throw new TypeLoadException(nameof(this._httpContext.Session));
+            session.Remove(key);
         }
 
         public object Get(string key)
         {
-            return _session[key];
+            var session = this._httpContext.Session ?? throw new TypeLoadException(nameof(this._httpContext.Session));
+            return session[key];
         }
 
         public T Get<T>(string key) where T : class
         {
-            return _session[key] as T;
+            var session = this._httpContext.Session ?? throw new TypeLoadException(nameof(this._httpContext.Session));
+            return session[key] as T;
         }
 
         public ISession Store(string key, object value)
         {
-            _session[key] = value;
-
+            var session = this._httpContext.Session ?? throw new TypeLoadException(nameof(this._httpContext.Session));
+            session[key] = value;
             return this;
         }
     }

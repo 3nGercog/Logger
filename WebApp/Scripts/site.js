@@ -1,11 +1,14 @@
 ﻿$(document).on("ready", function () {
     console.log("document ready");
+    if (!hst || hst.length === 0) {
+        $('#box').removeClass('jxgbox');
+    } else {
+        creareCharts();
+    }
 });
 $(window).on("load", function () {
     console.log("window load");
-    if(hst != undefined || hst != null) {
-        creareCharts();
-    }
+
 });
 $('input[type=button]').on('click', function (e) {
     var x = $('input[name=X]').val();
@@ -14,11 +17,6 @@ $('input[type=button]').on('click', function (e) {
 });
 
 function creareCharts() {
-
-    if (!hst || hst.length === 0) {
-        $('#box').removeClass('jxgbox');
-        return;
-    }
     // get random color
     //create text
     //create graf

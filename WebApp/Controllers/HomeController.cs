@@ -10,12 +10,13 @@ using WebApp.Models;
 
 namespace WebApp.Controllers
 {
+    [SessionState(System.Web.SessionState.SessionStateBehavior.Required)]
     public class HomeController : BaseController
     {
         List<Coordinate> coordinates;
         public HomeController() { }
-        public HomeController(ILogger logger, ISession session, IReader reader)
-            : base(logger, session, reader)
+        public HomeController(ILogger logger, ISession session, IReader reader, ISum sum)
+            : base(logger, session, reader, sum)
         {}
 
         [Logger()]
@@ -121,19 +122,33 @@ namespace WebApp.Controllers
                 else
                     STLogger.Info("set ViewBag.Message = " + ViewBag.Message);
 
-                coordinates = this.ISession.Get<List<Coordinate>>("list");
+                coordinates = new List<Coordinate>();
 
-                if (coordinates == null)
-                    STLogger.Warn("coordinates = null");
+                //coordinates = (List<Coordinate>)this.Session["list"] ?? new List<Coordinate>();
+                //coordinates = new List<Coordinate>() { new Coordinate { X = 2, Y = 2 }, new Coordinate { X = 3, Y = 5 },
+                //    new Coordinate { X = 6, Y = 3 }, new Coordinate { X = 2, Y = 2 } };
+                double x = 0, y = 0;
+                //if (coordinates == null)
+                //    STLogger.Warn("coordinates = null");
+                //else if(coordinates.Count <= 3)
+                //    STLogger.Warn("coordinates Count = " + coordinates.Count.ToString());
+                //else
+                //{
+                //    STLogger.Debug("Start sum to X");
+                //    x = Sum.SumX(coordinates);
+                //    STLogger.Debug("Start sum to Y");
+                //    y = Sum.SumY(coordinates);
+                //    STLogger.Debug("Complete sum ");
+                //}
 
-                STLogger.Info("init coordinates.");
-
+                ViewData["list"] = coordinates;
                 ViewData["graf"] = coordinates;
                 STLogger.Info("set ViewData[\"graf\"]");
                 ViewBag.Result = coordinates?.StringFormat();
-                STLogger.Info("set ViewBag.Result");
+                ViewBag.X = string.Format("sumX = {0}", x.ToString("N2"));
+                ViewBag.Y = string.Format("sumY =  {0}", y.ToString("N2"));
+                ViewBag.Square = string.Format("Square is {0}", (x == y).ToString());
 
-                STLogger.Info("Write coordinates to session");
             }
             catch (Exception ex)
             {
@@ -156,9 +171,15 @@ namespace WebApp.Controllers
             {
                 try
                 {
+                    ViewBag.Message = "Калькулятор";
+                    if (ViewBag.Message == null)
+                        STLogger.Warn("ViewBag.Message = null");
+                    else
+                        STLogger.Info("set ViewBag.Message = " + ViewBag.Message);
                     STLogger.Info("ModelState.IsValid " + ModelState.IsValid.ToString());
 
-                    coordinates = this.ISession.Get<List<Coordinate>>("list") ?? new List<Coordinate>();
+                    coordinates = (List<Coordinate>)ViewData["list"] ?? new List<Coordinate>();
+                    //coordinates = (List<Coordinate>)this.Session["list"] ?? new List<Coordinate>();
                     if (coordinates == null)
                         STLogger.Warn("coordinates = null");
 
@@ -167,7 +188,33 @@ namespace WebApp.Controllers
                     coordinates.Add(coordinate);
                     STLogger.Info("Add new coordinate to coordinates.");
 
-                    this.ISession.Store("list", coordinates);
+                    ViewData["list"] = coordinates;
+                    STLogger.Info("Write coordinates to session");
+                    double x = 0, y = 0;
+                    if (coordinates == null)
+                        STLogger.Warn("coordinates = null");
+                    else if (coordinates.Count <= 3)
+                        STLogger.Warn("coordinates Count = " + coordinates.Count.ToString());
+                    else
+                    {
+                        STLogger.Debug("Start sum to X");
+                        x = Sum.SumX(coordinates);
+                        STLogger.Debug("Start sum to Y");
+                        y = Sum.SumY(coordinates);
+                        STLogger.Debug("Complete sum ");
+                    }
+
+                    STLogger.Info("init coordinates.");
+
+                    ViewData["graf"] = coordinates;
+                    STLogger.Info("set ViewData[\"graf\"]");
+                    ViewBag.Result = coordinates?.StringFormat();
+                    //" sumX = " + x.Value.ToString("N2") + " sumY = " + y.Value.ToString("N2") + " Square is " + (x.Value == y.Value).ToString();
+                    ViewBag.X = string.Format("sumX = {0}", x.ToString("N2"));
+                    ViewBag.Y = string.Format("sumY =  {0}", y.ToString("N2"));
+                    ViewBag.Square = string.Format("Square is {0}", (x == y).ToString());
+                    STLogger.Info("set ViewBag.Result");
+
                     STLogger.Info("Write coordinates to session");
                 }
                 catch (Exception ex)
@@ -178,7 +225,7 @@ namespace WebApp.Controllers
                 {
                     STLogger.Start();
                 }
-                return RedirectToAction("Calculator");
+                return View("Calculator");
             }
             else
             {
