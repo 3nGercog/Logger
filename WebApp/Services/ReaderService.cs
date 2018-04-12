@@ -11,7 +11,7 @@ namespace WebApp
 {
     public class ReaderService : IReader
     {
-        string AppPath { get { return AppDomain.CurrentDomain.BaseDirectory + "bin\\logs"; ; } }
+        string AppPath { get { return AppDomain.CurrentDomain.BaseDirectory + "bin\\logs"; } }
         List<FileModel> ReadAll()
         {
             DirectoryInfo dir = new DirectoryInfo(AppPath);

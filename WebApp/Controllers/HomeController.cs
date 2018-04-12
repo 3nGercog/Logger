@@ -15,8 +15,8 @@ namespace WebApp.Controllers
     {
         List<Coordinate> coordinates;
         public HomeController() { }
-        public HomeController(ILogger logger, ISession session, IReader reader, ISum sum)
-            : base(logger, session, reader, sum)
+        public HomeController(ILogger logger, ISession session, IReader reader, ISum sum, IJsonFile jsonFile)
+            : base(logger, session, reader, sum, jsonFile)
         {}
 
         [Logger()]
@@ -123,7 +123,7 @@ namespace WebApp.Controllers
                     STLogger.Info("set ViewBag.Message = " + ViewBag.Message);
 
                 coordinates = new List<Coordinate>();
-
+                JsonFile.Write(coordinates);
                 //coordinates = (List<Coordinate>)this.Session["list"] ?? new List<Coordinate>();
                 //coordinates = new List<Coordinate>() { new Coordinate { X = 2, Y = 2 }, new Coordinate { X = 3, Y = 5 },
                 //    new Coordinate { X = 6, Y = 3 }, new Coordinate { X = 2, Y = 2 } };
@@ -141,7 +141,6 @@ namespace WebApp.Controllers
                 //    STLogger.Debug("Complete sum ");
                 //}
 
-                ViewData["list"] = coordinates;
                 ViewData["graf"] = coordinates;
                 STLogger.Info("set ViewData[\"graf\"]");
                 ViewBag.Result = coordinates?.StringFormat();
@@ -178,7 +177,7 @@ namespace WebApp.Controllers
                         STLogger.Info("set ViewBag.Message = " + ViewBag.Message);
                     STLogger.Info("ModelState.IsValid " + ModelState.IsValid.ToString());
 
-                    coordinates = (List<Coordinate>)ViewData["list"] ?? new List<Coordinate>();
+                    coordinates = JsonFile.Read();
                     //coordinates = (List<Coordinate>)this.Session["list"] ?? new List<Coordinate>();
                     if (coordinates == null)
                         STLogger.Warn("coordinates = null");
@@ -188,7 +187,7 @@ namespace WebApp.Controllers
                     coordinates.Add(coordinate);
                     STLogger.Info("Add new coordinate to coordinates.");
 
-                    ViewData["list"] = coordinates;
+                    JsonFile.Write(coordinates);
                     STLogger.Info("Write coordinates to session");
                     double x = 0, y = 0;
                     if (coordinates == null)

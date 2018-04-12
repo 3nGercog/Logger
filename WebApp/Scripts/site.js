@@ -5,6 +5,11 @@
     } else {
         creareCharts();
     }
+
+    $('input[name=clear]').on('click', function (e) {
+        console.log(clearUrl);
+        window.location.href = clearUrl;
+    });
 });
 $(window).on("load", function () {
     console.log("window load");

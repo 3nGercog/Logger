@@ -170,11 +170,13 @@
     <Compile Include="Extention\UnityControllerFactory.cs" />
     <Compile Include="Models\FileModel.cs" />
     <Compile Include="Models\IndexViewModel.cs" />
+    <Compile Include="Services\IJsonFile.cs" />
     <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\IReader.cs" />
     <Compile Include="Services\ISession.cs" />
     <Compile Include="Extention\LoggerAttribute.cs" />
     <Compile Include="Services\ISum.cs" />
+    <Compile Include="Services\JsonFileService.cs" />
     <Compile Include="Services\LoggerService.cs" />
     <Compile Include="Extention\SessionExtensions.cs" />
     <Compile Include="Services\ReaderService.cs" />

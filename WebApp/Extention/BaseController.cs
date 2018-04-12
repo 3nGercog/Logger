@@ -14,11 +14,13 @@ namespace WebApp
         readonly IReader _reader;
         readonly ISession _session;
         readonly ISum _sum;
+        readonly IJsonFile _jsonFile;
 
         protected STLogger STLogger { get; private set; }
         protected ISession ISession { get; set; }
         protected IReader Reader { get; private set; }
         protected ISum Sum { get; private set; }
+        protected IJsonFile JsonFile { get; private set; }
         public BaseController() { }
         public BaseController(ILogger logger)
         {
@@ -51,6 +53,19 @@ namespace WebApp
             Reader = this._reader;
             this._sum = sum;
             Sum = this._sum;
+        }
+        public BaseController(ILogger logger, ISession session, IReader reader, ISum sum, IJsonFile jsonFile)
+        {
+            this._logger = logger;
+            STLogger = this._logger.GetSTLogger();
+            this._session = session;
+            ISession = this._session;
+            this._reader = reader;
+            Reader = this._reader;
+            this._sum = sum;
+            Sum = this._sum;
+            this._jsonFile = jsonFile;
+            JsonFile = this._jsonFile;
         }
     }
 }

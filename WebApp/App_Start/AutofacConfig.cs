@@ -36,6 +36,7 @@ namespace WebApp
             builder.RegisterType<ReaderService>().As<IReader>();
             builder.RegisterType<SessionService>().As<ISession>();
             builder.RegisterType<SumService>().As<ISum>();
+            builder.RegisterType<JsonFileService>().As<IJsonFile>();
             // создаем новый контейнер с теми зависимостями, которые определены выше
             var container = builder.Build();
 
