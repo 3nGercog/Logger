@@ -15,6 +15,10 @@ namespace WebApp
         List<FileModel> ReadAll()
         {
             DirectoryInfo dir = new DirectoryInfo(AppPath);
+            if (!Directory.Exists(AppPath))
+            {
+                Directory.CreateDirectory(AppPath);
+            }
             List<FileModel> result = new List<FileModel>();
 
             string p = "";
@@ -38,39 +42,86 @@ namespace WebApp
             streamReader.Close();
             return result;
         }
+        List<FileModel> ReadAllSort(IndexViewModel model)
+        {
+            DirectoryInfo dir = new DirectoryInfo(AppPath);
+            if (!Directory.Exists(AppPath))
+            {
+                Directory.CreateDirectory(AppPath);
+            }
+            List<FileModel> result = new List<FileModel>();
+
+            string p = "";
+            string fileName = "";
+            string[] rows, arr;
+            //CultureInfo provider = new CultureInfo("en-US");
+            StreamReader streamReader = new StreamReader(Stream.Null);
+
+            foreach (var item in dir.GetFiles())
+            {
+                p = Path.Combine(AppPath, item.Name);
+                streamReader = new StreamReader(p);
+                rows = streamReader.ReadToEnd().Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                fileName = Path.GetFileNameWithoutExtension(p);
+                foreach (var r in rows)
+                {
+                    arr = r.Split(new char[] { '\t' });
+                    switch (model.Level)
+                    {
+                        case SiteLevel.All:
+                            if (!string.IsNullOrEmpty(model.Search))
+                            {
+                                if (arr.Contains(model.Level.ToString()) || arr.Contains(model.Search))
+                                    result.Add(new FileModel { FileName = fileName, Id = arr[0], Level = arr[1], Message = arr[2] });
+                            }
+                            else
+                            {
+                                if (arr.Contains(model.Level.ToString()))
+                                    result.Add(new FileModel { FileName = fileName, Id = arr[0], Level = arr[1], Message = arr[2] });
+                                else
+                                    result.Add(new FileModel { FileName = fileName, Id = arr[0], Level = arr[1], Message = arr[2] });
+                            }
+                            break;
+                        case SiteLevel.Debug:
+                            
+                        case SiteLevel.Info:
+                            
+                        case SiteLevel.Warn:
+                            
+                        case SiteLevel.Error:
+                            
+                        case SiteLevel.Fatal:
+                            
+                        default:
+                            if (!string.IsNullOrEmpty(model.Search))
+                            {
+                                if (arr.Contains(model.Level.ToString()) || arr.Contains(model.Search))
+                                    result.Add(new FileModel { FileName = fileName, Id = arr[0], Level = arr[1], Message = arr[2] });
+                            }
+                            else
+                            {
+                                if (arr.Contains(model.Level.ToString()))
+                                    result.Add(new FileModel { FileName = fileName, Id = arr[0], Level = arr[1], Message = arr[2] });
+                            }
+                            break;
+                    }
+                    
+                }
+            }
+            streamReader.Close();
+            return result;
+        }
         public List<FileModel> GetAll()
         {
             return this.ReadAll();
         }
-
         public string GetOne(string fileName, string idRow)
         {
             return File.ReadAllLines(Path.Combine(AppPath, fileName + ".log")).FirstOrDefault(r => r.StartsWith(idRow));
         }
-
         public List<FileModel> Sort(IndexViewModel model)
         {
-            var allRows = this.ReadAll();
-            if(model.Level == SiteLevel.All && string.IsNullOrEmpty(model.Search))
-            {
-                return allRows;
-            }
-            else if(model.Level == SiteLevel.All && !string.IsNullOrEmpty(model.Search))
-            {
-                return allRows.Where(fm => fm.Id.Contains(model.Search) || fm.Message.Contains(model.Search)).ToList();
-            }
-            else if (model.Level != SiteLevel.All && !string.IsNullOrEmpty(model.Search))
-            {
-                return allRows.Where(fm =>  fm.Level.Contains(model.Level.ToString()) && (fm.FileName.Contains(model.Search) || fm.Id.Contains(model.Search) || fm.Message.Contains(model.Search))).ToList();
-            }
-            else if (model.Level != SiteLevel.All && string.IsNullOrEmpty(model.Search))
-            {
-                return allRows.Where(fm => fm.Level.Contains(model.Level.ToString())).ToList();
-            }
-            else
-            {
-                return allRows;
-            }
+            return this.ReadAllSort(model);
         }
     }
 }
